@@ -80,7 +80,7 @@ var Multigrid = function() {
                                         +'<div class="thumbnail-content">'
                                             +'<div class="image-container">'
                                                 //+'<a href="#" class="hide-button" onclick="Multigrid.Hide(event,\''+ data['id'] +'\')">X</a>'
-                                                +'<img src="'+ data['thumbnail_180_url'] +'"></img>'
+                                                +'<img src="'+ data['thumbnail_180_url'].replace('http:', 'https:') +'"></img>'
                                             +'</div> '
                                             +'<div class="thumb-link">'+ data.title+'</div>'
                                             +'<abbr class="timeago" title="'+ moment(time.toString(), "X").format("ddd MMM DD HH:mm:ss YYYY") +'" data-livestamp="'+ time +'"></abbr>'
