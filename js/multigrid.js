@@ -4,14 +4,14 @@ var Multigrid = function() {
     var settings = {};
 
     var Init = function () {
-        settings = JSON.parse(localStorage.getItem('warcode.multigrid.settings')) || { "YouTubeID": "", "DailyMotionID": "", "VimeoID": ""};
+        settings = JSON.parse(localStorage.getItem('denyio.multigrid.settings')) || { "YouTubeID": "", "DailyMotionID": "", "VimeoID": ""};
         $("textarea#settings").html(JSON.stringify(settings, undefined, 2));
 
-        viewedAndHidden = localStorage.getItem('warcode.multigrid.videos.hidden') || [];
+        viewedAndHidden = localStorage.getItem('denyio.multigrid.videos.hidden') || [];
     },
 
     SaveSettings = function() {
-        localStorage.setItem('warcode.multigrid.settings', $("textarea#settings").val());
+        localStorage.setItem('denyio.multigrid.settings', $("textarea#settings").val());
 
     },
 
@@ -26,7 +26,7 @@ var Multigrid = function() {
         console.log(id);
         if(viewedAndHidden.indexOf(id) == -1) {
             viewedAndHidden.push(id);
-            localStorage.setItem('warcode.multigrid.videos.hidden', viewedAndHidden);
+            localStorage.setItem('denyio.multigrid.videos.hidden', viewedAndHidden);
         }
         ev.stopPropagation();
     },
