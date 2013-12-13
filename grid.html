@@ -1,0 +1,69 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>GRID</title>
+    <link rel="shortcut icon" href="https://s.ytimg.com/yts/img/favicon-vfldLzJxy.ico" type="image/x-icon">
+    <script type="text/javascript" src="js/jquery-2.0.2.min.js"></script>
+    <script type="text/javascript" src="js/jquery.tinysort.min.js"></script>
+    <script type="text/javascript" src="js/moment.min.js"></script>
+    <script type="text/javascript" src="js/livestamp.min.js"></script>
+    <script type="text/javascript" src="js/multigrid.js"></script>
+</head>
+<body>
+
+<link rel="stylesheet" href="css/grid.css">
+
+<div id="main">
+    <div id="stream" class="stream">
+    </div>
+    <div class="footer">
+        <a href = "javascript:void(0)" onclick = "document.getElementById('light').style.display='block';document.getElementById('fade').style.display='block'">Options</a>
+    </div>
+    <div id="light" class="lightbox_content">
+        <div>
+            <textarea id="settings" class="settings"></textarea>
+        </div>
+        <a href = "javascript:void(0)" onclick = "Multigrid.SaveSettings();document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none';">Save</a>
+    </div>
+    <div id="fade" class="black_overlay"></div>
+
+</div>
+
+<script>
+
+$(function() {
+
+    Multigrid.Init();
+    
+
+    $.getJSON( Multigrid.getDmURL() )
+    .fail( function ( j, t, e ) {
+            Multigrid.loadDmChannels( e, j.status );
+    } )
+    .done( function ( json ) {
+            Multigrid.loadDmChannels( json.list, 200 );
+    } );
+
+    $.getJSON( Multigrid.getYtURL() )
+    .fail( function ( j, t, e ) {
+            Multigrid.loadYtChannels( e, j.status );
+    } )
+    .done( function ( json ) {
+            Multigrid.loadYtChannels( json.feed.entry, 200 );
+    } );
+
+    $.getJSON( Multigrid.getViURL() )
+    .fail( function ( j, t, e ) {
+            Multigrid.loadViChannels( e, j.status );
+    } )
+    .done( function ( json ) {
+            Multigrid.loadViChannels( json, 200 );
+    } );
+
+});
+
+
+</script>
+
+</body>
+</html>
