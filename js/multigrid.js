@@ -123,17 +123,18 @@ var Multigrid = function() {
         
         var title = data.snippet.title;
         var id = data.snippet.thumbnails.default.url.replace('https://i.ytimg.com/vi/', '').replace('/default.jpg', '');
-        var time = Date.parse(data.snippet.publishedAt)/1000;
+        var datatime = Date.parse(data.snippet.publishedAt)/1000;
+        var momenttime = Date.parse(data.snippet.publishedAt);
         var thumbnail = data.snippet.thumbnails.high.url;
         var channel = data.snippet.channelTitle;
-        $('#stream').append('<div id="'+id+ '" class="thumbnail" data-time="'+ time +'">'
+        $('#stream').append('<div id="'+id+ '" class="thumbnail" data-time="'+ datatime +'">'
                         +'<a href="https://www.youtube.com/watch?v='+ id +'" target="_new">'
                             +'<div class="thumbnail-content">'
                                 +'<div class="image-container">'
                                     +'<img src="'+ thumbnail +'"></img>'
                                 +'</div>'
                                 +'<div class="thumb-link">'+ title + '</div>'
-                                +'<abbr class="timeago" title="'+ moment(time).format("ddd MMM DD HH:mm:ss YYYY") +'" data-livestamp="'+ moment(time).format("X") +'"></abbr>'
+                                +'<abbr class="timeago" title="'+ moment(momenttime).format("ddd MMM DD HH:mm:ss YYYY") +'" data-livestamp="'+ moment(momenttime).format("X") +'"></abbr>'
                                 +'<span class="thumb-author">by '+ channel +'</span>'
                             +'</div>'
                         +'</a>'
