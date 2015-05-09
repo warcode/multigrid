@@ -62,6 +62,7 @@ $(function() {
                   return filteron.snippet.type === 'upload';
               });
               console.log(items);
+              Multigrid.loadYtChannelsv3( items, 200 );
           },
           error: function() { 
               console.log("error"); 
@@ -72,6 +73,7 @@ $(function() {
           }
     });
 
+    /*
     $.getJSON( Multigrid.getYtURL() )
     .fail( function ( j, t, e ) {
             Multigrid.loadYtChannels( e, j.status );
@@ -79,6 +81,8 @@ $(function() {
     .done( function ( json ) {
             Multigrid.loadYtChannels( json.feed.entry, 200 );
     } );
+    
+    */
 
     $.getJSON( Multigrid.getViURL() )
     .fail( function ( j, t, e ) {

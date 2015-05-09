@@ -56,6 +56,12 @@ var Multigrid = function() {
             $('#stream>div').tsort({attr:'data-time', order:'desc'});
         }
     },
+    
+    loadYtChannelsv3 = function (data, code ) {
+        $.each( data, function ( i, v ) {
+            printYtLinkv3(v);
+        } );
+    },
 
     loadViChannels = function (data, code) {
         if ( code == 200 ) {
@@ -111,6 +117,27 @@ var Multigrid = function() {
                                 +'</div>');
         }
     },
+    
+    printYtLinkv3 = function (data) {
+        
+        var title = data.snippet.title;
+        var id = data.snippet.thumbnails.default.url.replace('https://i.ytimg.com/vi/', '').replace('/default.jpg', '');
+        var time = Date.parse(data.snippet.publishedAt)/1000;
+        var thumbnail = data.snippet.thumbnails.high.url;
+        var channel = data.snippet.channelTitle;
+        $('#stream').append('<div id="'+id+ '" class="thumbnail" data-time="'+ time +'">'
+                        +'<a href="https://www.youtube.com/watch?v='+ id +'" target="_new">'
+                            +'<div class="thumbnail-content">'
+                                +'<div class="image-container">'
+                                    +'<img src="'+ thumbnail +'"></img>'
+                                +'</div>'
+                                +'<div class="thumb-link">'+ title + '</div>'
+                                +'<abbr class="timeago" title="'+ moment(data.snippet.publishedAt.format("ddd MMM DD HH:mm:ss YYYY")) +'" data-livestamp="'+ moment(data.snippet.publishedAt.format("X")) +'"></abbr>'
+                                +'<span class="thumb-author">by '+ channel +'</span>'
+                            +'</div>'
+                        +'</a>'
+                    +'</div>');
+    },
 
     printViLink = function (data)
     {
@@ -132,7 +159,7 @@ var Multigrid = function() {
                                     +'</a>'
                                 +'</div>');
         }
-    }
+    },
 
 
     getViURL = function() {
@@ -166,6 +193,7 @@ var Multigrid = function() {
         Hide: Hide,
         loadDmChannels: loadDmChannels,
         loadYtChannels: loadYtChannels,
+        loadYtChannelsv3: loadYtChannelsv3,
         loadViChannels: loadViChannels,
         getViURL: getViURL,
         getYtURL: getYtURL,
