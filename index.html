@@ -66,6 +66,28 @@
                               return filteron.snippet.type === 'upload';
                           });
                           Multigrid.loadYtChannelsv3( items, 200 );
+                          
+                          yturl += '&pageToken=' + data.nextPageToken;
+                          //PAGE TWO
+                          $.ajax({
+                            url: yturl,
+                              type: 'GET',
+                              dataType: 'json',
+                              success: function(data) {
+                                  var items = data.items.filter(function(filteron) {
+                                      return filteron.snippet.type === 'upload';
+                                  });
+                                  Multigrid.loadYtChannelsv3( items, 200 );
+                              },
+                              error: function() { 
+                                  console.log("error"); 
+                              },
+                              beforeSend: function(xhr) {
+                                    var token = localStorage.getItem('denyio.multigrid.yt.token');
+                                    xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+                              }
+                        });
+                          
                       },
                       error: function() { 
                           console.log("error"); 
