@@ -84,7 +84,7 @@
 
             var dd = new Date();
             dd.setDate(dd.getDate()-3);
-            var reqdate = moment(dd).format("YYYY-MM-DD");
+            var reqdate = moment(dd).format("YYYY-MM-DDT");
             getyoutube('https://www.googleapis.com/youtube/v3/activities?part=snippet&home=true&maxResults=50&publishedAfter='+reqdate, null, 1);
         
             /*
