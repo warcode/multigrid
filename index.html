@@ -3,7 +3,6 @@
     <meta charset="utf-8">
     <title>GRID</title>
     <link rel="shortcut icon" href="https://s.ytimg.com/yts/img/favicon-vfldLzJxy.ico" type="image/x-icon">
-    <script type="text/javascript" src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
     <script type="text/javascript" src="js/jquery-2.0.2.min.js"></script>
     <script type="text/javascript" src="js/jquery.tinysort.min.js"></script>
     <script type="text/javascript" src="js/routie.min.js"></script>
@@ -35,12 +34,6 @@
 <script>
     
 $(function() {
-    
-    gapi.client.load('youtube', 'v3', function() {
-    }); 
-    
-    var items = youtube.activities.list(part='snippet', home=true);
-    console.log(items);
 
     routie(':data', function(data) {
         var access_token = data.split('&')[0].replace('access_token=', '');
