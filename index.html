@@ -57,8 +57,11 @@ $(function() {
         url: 'https://www.googleapis.com/youtube/v3/activities?part=snippet&home=true&maxResults=50',
           type: 'GET',
           dataType: 'json',
-          success: function(data) {  
-              console.log(data);
+          success: function(data) {
+              var items = data.filter(function(filteron) {
+                  return filteron.snippet.type === 'upload';
+              });
+              console.log(items);
           },
           error: function() { 
               console.log("error"); 
