@@ -53,8 +53,10 @@ $(function() {
             Multigrid.loadDmChannels( json.list, 200 );
     } );
     
+    var yttime = moment(new Date((new Date().GetDate()-1).setHours(0,0,0,0))).format("YYYY-MM-DDThh:mm:ss.sZ");
+    
     $.ajax({
-        url: 'https://www.googleapis.com/youtube/v3/activities?part=snippet&home=true&maxResults=50',
+        url: 'https://www.googleapis.com/youtube/v3/activities?part=snippet&home=true&maxResults=50&publishedAfter=' + yttime,
           type: 'GET',
           dataType: 'json',
           success: function(data) {
