@@ -132,7 +132,7 @@ var Multigrid = function() {
                                     +'<img src="'+ thumbnail +'"></img>'
                                 +'</div>'
                                 +'<div class="thumb-link">'+ title + '</div>'
-                                +'<abbr class="timeago" title="'+ moment(time.format("ddd MMM DD HH:mm:ss YYYY")) +'" data-livestamp="'+ moment(time.format("X")) +'"></abbr>'
+                                //+'<abbr class="timeago" title="'+ moment(time.format("ddd MMM DD HH:mm:ss YYYY")) +'" data-livestamp="'+ moment(time.format("X")) +'"></abbr>'
                                 +'<span class="thumb-author">by '+ channel +'</span>'
                             +'</div>'
                         +'</a>'
