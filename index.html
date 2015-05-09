@@ -35,12 +35,18 @@
 <script>
     
 $(function() {
+    
+    gapi.client.load('youtube', 'v3', function() {
+    }); 
+    
+    var items = youtube.activities.list(part='snippet', home=true);
+    console.log(items);
 
     routie(':data', function(data) {
         var access_token = data.split('&')[0].replace('access_token=', '');
         localStorage.setItem('denyio.multigrid.yt.token', access_token);
-        var items = youtube.activities.list(part='snippet', home=true);
-        console.log(items);
+        
+        window.location = 'https://deny.io/grid';
     });
     
     Multigrid.Init();
@@ -53,6 +59,22 @@ $(function() {
     .done( function ( json ) {
             Multigrid.loadDmChannels( json.list, 200 );
     } );
+    
+    $.ajax({
+        url: 'https://www.googleapis.com/youtube/v3/activities?part=snippet&home=true&maxResults=50',
+          type: 'GET',
+          dataType: 'json',
+          success: function(data) {  
+              console.log(data);
+          },
+          error: function() { 
+              console.log("error"); 
+          },
+          beforeSend: function(xhr) {
+                var token = localStorage.getItem('denyio.multigrid.yt.token');
+                xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+          }
+    });
 
     $.getJSON( Multigrid.getYtURL() )
     .fail( function ( j, t, e ) {
