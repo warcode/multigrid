@@ -1,109 +1,102 @@
 <html>
-<head>
-    <meta charset="utf-8">
-    <title>GRID</title>
-    <link rel="shortcut icon" href="https://s.ytimg.com/yts/img/favicon-vfldLzJxy.ico" type="image/x-icon">
-    <script type="text/javascript" src="js/jquery-2.0.2.min.js"></script>
-    <script type="text/javascript" src="js/jquery.tinysort.min.js"></script>
-    <script type="text/javascript" src="js/routie.min.js"></script>
-    <script type="text/javascript" src="js/moment.min.js"></script>
-    <script type="text/javascript" src="js/livestamp.min.js"></script>
-    <script type="text/javascript" src="js/multigrid.js"></script>
-</head>
-<body>
-
-<link rel="stylesheet" href="css/grid.css">
-
-<div id="main">
-    <div id="stream" class="stream">
-    </div>
-    <div class="footer">
-        <a href = "javascript:void(0)" onclick = "document.getElementById('light').style.display='block';document.getElementById('fade').style.display='block'">Options</a>
-        <a href="https://accounts.google.com/o/oauth2/auth?client_id=719932936181-ckkbbqt1594918ohacq4bloau5p907vj.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fdeny.io%2Fgrid&response_type=token&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fyoutube.readonly">Youtube Auth</a>
-    </div>
-    <div id="light" class="lightbox_content">
-        <div>
-            <textarea id="settings" class="settings"></textarea>
+    
+    <head>
+        <meta charset="utf-8">
+        <title>GRID</title>
+        <link rel="shortcut icon" href="https://s.ytimg.com/yts/img/favicon-vfldLzJxy.ico" type="image/x-icon">
+        <script type="text/javascript" src="js/jquery-2.0.2.min.js"></script>
+        <script type="text/javascript" src="js/jquery.tinysort.min.js"></script>
+        <script type="text/javascript" src="js/routie.min.js"></script>
+        <script type="text/javascript" src="js/moment.min.js"></script>
+        <script type="text/javascript" src="js/livestamp.min.js"></script>
+        <script type="text/javascript" src="js/multigrid.js"></script>
+    </head>
+    
+    <body>
+        <link rel="stylesheet" href="css/grid.css">
+        <div id="main">
+            <div id="stream" class="stream"></div>
+            <div class="footer">
+                <a href="javascript:void(0)" onclick="document.getElementById('light').style.display='block';document.getElementById('fade').style.display='block'">Options</a>
+                <a href="https://accounts.google.com/o/oauth2/auth?client_id=719932936181-ckkbbqt1594918ohacq4bloau5p907vj.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fdeny.io%2Fgrid&response_type=token&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fyoutube.readonly">Youtube Auth</a>
+            </div>
+            <div id="light" class="lightbox_content">
+                <div>
+                    <textarea id="settings" class="settings"></textarea>
+                </div>
+                <a href="javascript:void(0)" onclick="Multigrid.SaveSettings();document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none';">Save</a>
+            </div>
+            <div id="fade" class="black_overlay"></div>
         </div>
-        <a href = "javascript:void(0)" onclick = "Multigrid.SaveSettings();document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none';">Save</a>
-    </div>
-    <div id="fade" class="black_overlay"></div>
+        <script>
+            $(function() {
+            
+                routie(':data', function(data) {
+                    var access_token = data.split('&')[0].replace('access_token=', '');
+                    localStorage.setItem('denyio.multigrid.yt.token', access_token);
+                    
+                    window.location = 'https://deny.io/grid';
+                });
+                
+                Multigrid.Init();
+                
+            
+                $.getJSON( Multigrid.getDmURL() )
+                .fail( function ( j, t, e ) {
+                        Multigrid.loadDmChannels( e, j.status );
+                } )
+                .done( function ( json ) {
+                        Multigrid.loadDmChannels( json.list, 200 );
+                } );
+                
+                var dd = new Date();
+                dd.setDate(dd.getDate()-1);
+                dd.setHours(0,0,0,0);
+                
+                var yttime = moment(dd).format("YYYY-MM-DDThh:mm:ss.sZ");
+                var yturl = 'https://www.googleapis.com/youtube/v3/activities?part=snippet&home=true&maxResults=50' // + encodeURIComponent(yttime);
+                
+                $.ajax({
+                    url: yturl,
+                      type: 'GET',
+                      dataType: 'json',
+                      success: function(data) {
+                          console.log(data);
+                          var items = data.items.filter(function(filteron) {
+                              return filteron.snippet.type === 'upload';
+                          });
+                          Multigrid.loadYtChannelsv3( items, 200 );
+                      },
+                      error: function() { 
+                          console.log("error"); 
+                      },
+                      beforeSend: function(xhr) {
+                            var token = localStorage.getItem('denyio.multigrid.yt.token');
+                            xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+                      }
+                });
+            
+                /*
+                $.getJSON( Multigrid.getYtURL() )
+                .fail( function ( j, t, e ) {
+                        Multigrid.loadYtChannels( e, j.status );
+                } )
+                .done( function ( json ) {
+                        Multigrid.loadYtChannels( json.feed.entry, 200 );
+                } );
+                
+                */
+            
+                $.getJSON( Multigrid.getViURL() )
+                .fail( function ( j, t, e ) {
+                        Multigrid.loadViChannels( e, j.status );
+                } )
+                .done( function ( json ) {
+                        Multigrid.loadViChannels( json, 200 );
+                } );
+            
+            });
+        </script>
+    </body>
 
-</div>
-
-<script>
-    
-$(function() {
-
-    routie(':data', function(data) {
-        var access_token = data.split('&')[0].replace('access_token=', '');
-        localStorage.setItem('denyio.multigrid.yt.token', access_token);
-        
-        window.location = 'https://deny.io/grid';
-    });
-    
-    Multigrid.Init();
-    
-
-    $.getJSON( Multigrid.getDmURL() )
-    .fail( function ( j, t, e ) {
-            Multigrid.loadDmChannels( e, j.status );
-    } )
-    .done( function ( json ) {
-            Multigrid.loadDmChannels( json.list, 200 );
-    } );
-    
-    var dd = new Date();
-    dd.setDate(dd.getDate()-1);
-    dd.setHours(0,0,0,0);
-    
-    var yttime = moment(dd).format("YYYY-MM-DDThh:mm:ss.sZ");
-    console.log(yttime);
-    var yturl = 'https://www.googleapis.com/youtube/v3/activities?part=snippet&home=true&maxResults=50&publishedAfter=' + encodeURIComponent(yttime);
-    
-    $.ajax({
-        url: yturl,
-          type: 'GET',
-          dataType: 'json',
-          success: function(data) {
-              var items = data.items.filter(function(filteron) {
-                  return filteron.snippet.type === 'upload';
-              });
-              console.log(items);
-              Multigrid.loadYtChannelsv3( items, 200 );
-          },
-          error: function() { 
-              console.log("error"); 
-          },
-          beforeSend: function(xhr) {
-                var token = localStorage.getItem('denyio.multigrid.yt.token');
-                xhr.setRequestHeader('Authorization', 'Bearer ' + token);
-          }
-    });
-
-    /*
-    $.getJSON( Multigrid.getYtURL() )
-    .fail( function ( j, t, e ) {
-            Multigrid.loadYtChannels( e, j.status );
-    } )
-    .done( function ( json ) {
-            Multigrid.loadYtChannels( json.feed.entry, 200 );
-    } );
-    
-    */
-
-    $.getJSON( Multigrid.getViURL() )
-    .fail( function ( j, t, e ) {
-            Multigrid.loadViChannels( e, j.status );
-    } )
-    .done( function ( json ) {
-            Multigrid.loadViChannels( json, 200 );
-    } );
-
-});
-
-
-</script>
-
-</body>
 </html>
