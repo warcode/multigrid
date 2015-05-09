@@ -4,12 +4,13 @@
     <title>GRID</title>
     <link rel="shortcut icon" href="https://s.ytimg.com/yts/img/favicon-vfldLzJxy.ico" type="image/x-icon">
     <script type="text/javascript" src="https://apis.google.com/js/client.js?onload=OnLoadCallback"></script>
-    <script type="text/javascript" src="js/jquery-2.0.2.min.js"></script>
-    <script type="text/javascript" src="js/jquery.tinysort.min.js"></script>
-    <script type="text/javascript" src="js/moment.min.js"></script>
-    <script type="text/javascript" src="js/livestamp.min.js"></script>
-    <script type="text/javascript" src="js/auth.js"></script>
-    <script type="text/javascript" src="js/multigrid.js"></script>
+    <script type="text/javascript" src="/js/jquery-2.0.2.min.js"></script>
+    <script type="text/javascript" src="/js/jquery.tinysort.min.js"></script>
+    <script type="text/javascript" src="/js/routie.min.js"></script>
+    <script type="text/javascript" src="/js/moment.min.js"></script>
+    <script type="text/javascript" src="/js/livestamp.min.js"></script>
+    <script type="text/javascript" src="/js/auth.js"></script>
+    <script type="text/javascript" src="/js/multigrid.js"></script>
 </head>
 <body>
 
@@ -20,6 +21,7 @@
     </div>
     <div class="footer">
         <a href = "javascript:void(0)" onclick = "document.getElementById('light').style.display='block';document.getElementById('fade').style.display='block'">Options</a>
+        <a href="https://accounts.google.com/o/oauth2/auth?client_id=719932936181-ckkbbqt1594918ohacq4bloau5p907vj.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fdeny.io%2Fgrid&response_type=token&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fyoutube.readonly">Youtube Auth</a>
     </div>
     <div id="light" class="lightbox_content">
         <div>
@@ -32,9 +34,13 @@
 </div>
 
 <script>
-
+    
 $(function() {
 
+    routie(':access_token', function(access_token) {
+        localStorage.setItem('denyio.multigrid.yt.token', access_token);
+    });
+    
     Multigrid.Init();
     
 
