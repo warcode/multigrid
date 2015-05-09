@@ -85,7 +85,7 @@
             var dd = new Date();
             dd.setDate(dd.getDate()-3);
             var reqdate = moment(dd).format("YYYY-MM-DD");
-            getyoutube('https://www.googleapis.com/youtube/v3/activities?part=snippet&home=true&maxResults=50&publishedAfter='+ reqdate + encodeURIComponent('T00:00:00.0Z'), null, 1);
+            getyoutube('https://www.googleapis.com/youtube/v3/activities?part=snippet&home=true&maxResults=50&publishedAfter='+ reqdate + encodeURIComponent('T00:00:00.000Z'), null, 1);
         
             /*
             $.getJSON( Multigrid.getYtURL() )
