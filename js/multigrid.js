@@ -122,7 +122,7 @@ var Multigrid = function() {
         
         var title = data.snippet.title;
         var id = data.snippet.thumbnails.default.url.replace('https://i.ytimg.com/vi/', '').replace('/default.jpg', '');
-        var time = Date.parse(data.snippet.publishedAt)/1000;
+        var time = Date.parse(data.snippet.publishedAt);
         var thumbnail = data.snippet.thumbnails.high.url;
         var channel = data.snippet.channelTitle;
         $('#stream').append('<div id="'+id+ '" class="thumbnail" data-time="'+ time +'">'
@@ -132,7 +132,7 @@ var Multigrid = function() {
                                     +'<img src="'+ thumbnail +'"></img>'
                                 +'</div>'
                                 +'<div class="thumb-link">'+ title + '</div>'
-                                +'<abbr class="timeago" title="'+ moment(data.snippet.publishedAt.format("ddd MMM DD HH:mm:ss YYYY")) +'" data-livestamp="'+ moment(data.snippet.publishedAt.format("X")) +'"></abbr>'
+                                +'<abbr class="timeago" title="'+ moment(time.format("ddd MMM DD HH:mm:ss YYYY")) +'" data-livestamp="'+ moment(time.format("X")) +'"></abbr>'
                                 +'<span class="thumb-author">by '+ channel +'</span>'
                             +'</div>'
                         +'</a>'
