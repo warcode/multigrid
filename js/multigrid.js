@@ -61,6 +61,7 @@ var Multigrid = function() {
         $.each( data, function ( i, v ) {
             printYtLinkv3(v);
         } );
+        $('#stream>div').tsort({attr:'data-time', order:'desc'});
     },
 
     loadViChannels = function (data, code) {
@@ -122,7 +123,7 @@ var Multigrid = function() {
         
         var title = data.snippet.title;
         var id = data.snippet.thumbnails.default.url.replace('https://i.ytimg.com/vi/', '').replace('/default.jpg', '');
-        var time = Date.parse(data.snippet.publishedAt);
+        var time = Date.parse(data.snippet.publishedAt)/1000;
         var thumbnail = data.snippet.thumbnails.high.url;
         var channel = data.snippet.channelTitle;
         $('#stream').append('<div id="'+id+ '" class="thumbnail" data-time="'+ time +'">'
