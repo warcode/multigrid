@@ -58,9 +58,10 @@ $(function() {
     dd.setHours(0,0,0,0);
     
     var yttime = moment(dd).format("YYYY-MM-DDThh:mm:ss.sZ");
+    var yturl = 'https://www.googleapis.com/youtube/v3/activities?part=snippet&home=true&maxResults=50&publishedAfter=' + encodeURIComponent(yttime);
     
     $.ajax({
-        url: 'https://www.googleapis.com/youtube/v3/activities?part=snippet&home=true&maxResults=50&publishedAfter=' + yttime,
+        url: yturl,
           type: 'GET',
           dataType: 'json',
           success: function(data) {
