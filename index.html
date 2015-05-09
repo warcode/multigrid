@@ -1,5 +1,4 @@
 <html>
-    
     <head>
         <meta charset="utf-8">
         <title>GRID</title>
@@ -11,7 +10,6 @@
         <script type="text/javascript" src="js/livestamp.min.js"></script>
         <script type="text/javascript" src="js/multigrid.js"></script>
     </head>
-    
     <body>
         <link rel="stylesheet" href="css/grid.css">
         <div id="main">
@@ -29,96 +27,83 @@
             <div id="fade" class="black_overlay"></div>
         </div>
         <script>
-            $(function() {
-            
-                routie(':data', function(data) {
-                    var access_token = data.split('&')[0].replace('access_token=', '');
-                    localStorage.setItem('denyio.multigrid.yt.token', access_token);
-                    
-                    window.location = 'https://deny.io/grid';
-                });
+        $(function() {
+        
+            routie(':data', function(data) {
+                var access_token = data.split('&')[0].replace('access_token=', '');
+                localStorage.setItem('denyio.multigrid.yt.token', access_token);
                 
-                Multigrid.Init();
-                
-            
-                $.getJSON( Multigrid.getDmURL() )
-                .fail( function ( j, t, e ) {
-                        Multigrid.loadDmChannels( e, j.status );
-                } )
-                .done( function ( json ) {
-                        Multigrid.loadDmChannels( json.list, 200 );
-                } );
-                
-                var dd = new Date();
-                dd.setDate(dd.getDate()-1);
-                dd.setHours(0,0,0,0);
-                
-                var yttime = moment(dd).format("YYYY-MM-DDThh:mm:ss.sZ");
-                var yturl = 'https://www.googleapis.com/youtube/v3/activities?part=snippet&home=true&maxResults=50' // + encodeURIComponent(yttime);
-                
-                $.ajax({
-                    url: yturl,
-                      type: 'GET',
-                      dataType: 'json',
-                      success: function(data) {
-                          console.log(data);
-                          var items = data.items.filter(function(filteron) {
-                              return filteron.snippet.type === 'upload';
-                          });
-                          Multigrid.loadYtChannelsv3( items, 200 );
-                          
-                          yturl += '&pageToken=' + data.nextPageToken;
-                          //PAGE TWO
-                          $.ajax({
-                            url: yturl,
-                              type: 'GET',
-                              dataType: 'json',
-                              success: function(data) {
-                                  var items = data.items.filter(function(filteron) {
-                                      return filteron.snippet.type === 'upload';
-                                  });
-                                  Multigrid.loadYtChannelsv3( items, 200 );
-                              },
-                              error: function() { 
-                                  console.log("error"); 
-                              },
-                              beforeSend: function(xhr) {
-                                    var token = localStorage.getItem('denyio.multigrid.yt.token');
-                                    xhr.setRequestHeader('Authorization', 'Bearer ' + token);
-                              }
-                        });
-                          
-                      },
-                      error: function() { 
-                          console.log("error"); 
-                      },
-                      beforeSend: function(xhr) {
-                            var token = localStorage.getItem('denyio.multigrid.yt.token');
-                            xhr.setRequestHeader('Authorization', 'Bearer ' + token);
-                      }
-                });
-            
-                /*
-                $.getJSON( Multigrid.getYtURL() )
-                .fail( function ( j, t, e ) {
-                        Multigrid.loadYtChannels( e, j.status );
-                } )
-                .done( function ( json ) {
-                        Multigrid.loadYtChannels( json.feed.entry, 200 );
-                } );
-                
-                */
-            
-                $.getJSON( Multigrid.getViURL() )
-                .fail( function ( j, t, e ) {
-                        Multigrid.loadViChannels( e, j.status );
-                } )
-                .done( function ( json ) {
-                        Multigrid.loadViChannels( json, 200 );
-                } );
-            
+                window.location = 'https://deny.io/grid';
             });
+            
+            Multigrid.Init();
+            
+        
+            $.getJSON( Multigrid.getDmURL() )
+            .fail( function ( j, t, e ) {
+                    Multigrid.loadDmChannels( e, j.status );
+            } )
+            .done( function ( json ) {
+                    Multigrid.loadDmChannels( json.list, 200 );
+            } );
+            
+
+            var getyoutube = function(url, next, count) {
+                if(count > 4) {
+                    return;
+                }
+                var yturl = url;
+                if(next) {
+                  yturl += '&pageToken=' + next;
+                }
+
+                $.ajax({
+                  url: yturl,
+                  type: 'GET',
+                  dataType: 'json',
+                  success: function(data) {
+                      console.log(data);
+                      var items = data.items.filter(function(filteron) {
+                          return filteron.snippet.type === 'upload';
+                      });
+                      Multigrid.loadYtChannelsv3( items, 200 );
+                      
+                      if(data.nextPageToken) {
+                          getyoutube(url, data.nextPageToken, count + 1);
+                      }
+                  },
+                  error: function() {
+                      console.log("error");
+                  },
+                  beforeSend: function(xhr) {
+                          var token = localStorage.getItem('denyio.multigrid.yt.token');
+                          xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+                  }
+                });
+            };
+
+            getyoutube('https://www.googleapis.com/youtube/v3/activities?part=snippet&home=true&maxResults=50', null, 1);
+        
+            /*
+            $.getJSON( Multigrid.getYtURL() )
+            .fail( function ( j, t, e ) {
+                    Multigrid.loadYtChannels( e, j.status );
+            } )
+            .done( function ( json ) {
+                    Multigrid.loadYtChannels( json.feed.entry, 200 );
+            } );
+            
+            */
+        
+            $.getJSON( Multigrid.getViURL() )
+            .fail( function ( j, t, e ) {
+                    Multigrid.loadViChannels( e, j.status );
+            } )
+            .done( function ( json ) {
+                    Multigrid.loadViChannels( json, 200 );
+            } );
+        
+        });
         </script>
     </body>
-
 </html>
