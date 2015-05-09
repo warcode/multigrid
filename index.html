@@ -36,7 +36,8 @@
     
 $(function() {
 
-    routie(':access_token', function(access_token) {
+    routie(':data', function(data) {
+        var access_token = data.split('&')[0].replace('access_token=', '');
         localStorage.setItem('denyio.multigrid.yt.token', access_token);
         var items = youtube.activities.list(part='snippet', home=true);
         console.log(items);
